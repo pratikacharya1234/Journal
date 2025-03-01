@@ -71,6 +71,34 @@ def edit_entry(entries):
     else:
         print("Invalid entry number.")  # Print error message for invalid index
 
+# Function to provide emotional insights
+def emotional_insights(entries):
+    emotion_count = {'happy': 0, 'sad': 0, 'angry': 0, 'neutral': 0}
+    for entry in entries:
+        emotion_count[entry['emotion']] += 1
+    total_entries = len(entries)
+    if total_entries == 0:
+        print("No entries to analyze.")
+        return
+    print("\nEmotional Insights:")
+    for emotion, count in emotion_count.items():
+        percentage = (count / total_entries) * 100
+        print(f"{emotion.capitalize()}: {percentage:.2f}%")
+
+# Function to add tags to entries
+def add_tags(entries):
+    print("\nAdd Tags:")
+    for i, entry in enumerate(entries):  # List all entries with their index
+        print(f"{i + 1}. {entry['date']}: {entry['emotion']}")
+    index = int(input("Enter the number of the entry to tag: ")) - 1  # Get the entry number to tag
+    if 0 <= index < len(entries):  # Check if the index is valid
+        tags = input("Enter tags (comma-separated): ").split(',')
+        entries[index]['tags'] = [tag.strip() for tag in tags]
+        save_entries(entries)  # Save the updated entries
+        print(f"Added tags to entry from {entries[index]['date']}")  # Confirm tagging
+    else:
+        print("Invalid entry number.")  # Print error message for invalid index
+
 # Main function to run the journal application
 def main():
     entries = load_entries()  # Load existing entries
@@ -81,7 +109,9 @@ def main():
         print("2. View mood trend")
         print("3. Remove an entry")
         print("4. Edit an entry")
-        print("5. Exit")
+        print("5. Add tags to an entry")
+        print("6. View emotional insights")
+        print("7. Exit")
         choice = input("Choose an option: ")  # Get the user's choice
         if choice == '1':
             entry = input("Write your journal entry: ")  # Get the new journal entry
@@ -99,6 +129,10 @@ def main():
         elif choice == '4':
             edit_entry(entries)  # Call the function to edit an entry
         elif choice == '5':
+            add_tags(entries)  # Call the function to add tags to an entry
+        elif choice == '6':
+            emotional_insights(entries)  # Call the function to view emotional insights
+        elif choice == '7':
             break  # Exit the application
         else:
             print("Invalid choice. Please try again.")  # Print error message for invalid choice
